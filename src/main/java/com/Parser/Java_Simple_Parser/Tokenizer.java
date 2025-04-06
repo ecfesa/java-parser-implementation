@@ -7,13 +7,13 @@ import java.util.regex.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tokenizer{
+public class Tokenizer {
     public String value;
     public String identification;
     private Token leftToken;
     private Token rightToken;
 
-    public static List<Token> tokenizer(String input){
+    public static List<Token> tokenizer(String input) {
 
         List<Token> tokens = new ArrayList<Token>();
 
@@ -21,7 +21,7 @@ public class Tokenizer{
 
         while (i < input.length()) {
             char c = input.charAt(i);
-            
+
             // Handle single-character tokens
             switch (c) {
                 case '+':
@@ -48,15 +48,15 @@ public class Tokenizer{
                     int j = 1;
                     StringBuilder nonvariable = new StringBuilder();
                     nonvariable.append(input.charAt(i));
-                    
+
                     while ((i + j) < input.length() && !pattern.matcher(String.valueOf(input.charAt(i + j))).find()) {
                         nonvariable.append(input.charAt(i + j));
                         j++;
                     }
                     tokens.add(new Token("ID", input.substring(i, i + j)));
-                    
+
                     // Move i to after the token
-                    i = i + j-1;
+                    i = i + j - 1;
 
                     break;
             }

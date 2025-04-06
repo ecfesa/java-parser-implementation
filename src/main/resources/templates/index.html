@@ -1,12 +1,199 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    <header></header>
-    <main>test</main>
-    <footer></footer>
-  </body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <title>Java Expression Parser</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #2c3e50;
+    }
+
+    .test-case {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .test-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .expression {
+      font-family: monospace;
+      font-size: 1.2em;
+      background-color: #e9ecef;
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+
+    .valid {
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    .invalid {
+      color: #dc3545;
+      font-weight: bold;
+    }
+
+    .token-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+
+    .token-table th,
+    .token-table td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .token-table th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+
+    /* Tree styling */
+    .tree {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+      position: relative;
+    }
+
+    .tree li {
+      margin: 0;
+      padding: 0 0 0 26px;
+      position: relative;
+    }
+
+    .tree li::before,
+    .tree li::after {
+      content: '';
+      position: absolute;
+      left: 10px;
+    }
+
+    .tree li::before {
+      border-top: 1px solid #999;
+      top: 12px;
+      width: 15px;
+      height: 0;
+    }
+
+    .tree li::after {
+      border-left: 1px solid #999;
+      height: 100%;
+      width: 0;
+      top: 0;
+    }
+
+    .tree li:last-child::after {
+      height: 12px;
+    }
+
+    .tree>li::after,
+    .tree>li::before {
+      display: none;
+    }
+
+    .node-type {
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .node-value {
+      font-family: monospace;
+      color: #28a745;
+    }
+
+    .parse-tree-container {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+
+    .section-title {
+      font-size: 1.1em;
+      margin: 15px 0 10px;
+      color: #495057;
+      border-bottom: 1px solid #dee2e6;
+      padding-bottom: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Java Expression Parser</h1>
+    <p>A simple expression parser that validates and visualizes mathematical expressions.</p>
+  </header>
+  <main>
+    <div class="test-cases-container">
+      <h2>Test Cases</h2>
+
+      <div th:each="test : ${testResults}" class="test-case">
+        <div class="test-header">
+          <h3 th:text="${test.testName}">Test Name</h3>
+          <span th:class="${test.isValid ? 'valid' : 'invalid'}"
+            th:text="${test.isValid ? 'Valid' : 'Invalid'}">Validity</span>
+        </div>
+
+        <div class="expression" th:text="${test.expression}">Expression</div>
+
+        <div class="section-title">Tokens:</div>
+        <table class="token-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="token : ${test.tokens}">
+              <td th:text="${token.identification}">Type</td>
+              <td th:text="${token.value}">Value</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div th:if="${test.isValid}" class="parse-tree-section">
+          <div class="section-title">Parse Tree:</div>
+          <div class="parse-tree-container" th:utext="${test.parseTreeHtml}">
+            <!-- Parse tree will be inserted here -->
+          </div>
+        </div>
+
+        <div th:if="${test.error}" class="error-message">
+          <p th:text="${test.error}">Error message</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2023 Java Expression Parser</p>
+  </footer>
+</body>
+
 </html>
