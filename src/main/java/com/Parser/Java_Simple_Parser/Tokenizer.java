@@ -47,7 +47,6 @@ public class Tokenizer {
                     }
                     tokens.add(new Token(TokenType.ID, input.substring(i, i + j)));
 
-                    // Move i to after the token
                     i = i + j - 1;
 
                     break;
