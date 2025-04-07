@@ -1,6 +1,5 @@
 package com.Parser.Java_Simple_Parser.Controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.Parser.Java_Simple_Parser.Token;
@@ -15,14 +14,14 @@ public class MainController {
     @GetMapping("/")
     public String home() {
 
-        String input = "Primeiro * Segundo + Terceiro * (Quarto)";
+        String input = "Primeiro * Segundo + Terceiro * (Quarto) + *(Quinto)";
         input = input.replaceAll(" ", "");
 
         List<Token> tokens = Tokenizer.tokenizer(input);
 
-        System.out.println("Tokenização funcional!");
-        for(Token token : tokens){
-            System.out.println(token.identification + ":" +  token.value);
+        System.out.println("Tokens: ");
+        for (Token token : tokens) {
+            System.out.println(token.type + ":" + token.value);
         }
 
         return "index";

@@ -1,13 +1,11 @@
 package com.Parser.Java_Simple_Parser;
 
-public class Token{
+public class Token {
+    public TokenType type;
     public String value;
-    public String identification;
-    private Token leftToken;
-    private Token rightToken;
 
-    public Token(String identification, String value){
-        this.identification = identification;
+    public Token(TokenType type, String value) {
+        this.type = type;
         this.value = value;
     }
 }
