@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>About - Parser Implementation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: #000;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #001800;
+            border-right: 2px solid #00ff00;
+            padding: 15px 0;
+            position: fixed;
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            text-align: center;
+            color: #00ff00;
+            padding: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #00ff00;
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px #00ff00;
+        }
+
+        .sidebar-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-divider {
+            padding: 8px 15px;
+            background-color: #002000;
+            color: #00ff00;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid #00ff00;
+            margin-top: 10px;
+            text-shadow: 0 0 5px #00ff00;
+        }
+
+        .sidebar-item {
+            padding: 8px 15px;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-item:hover {
+            background-color: #002800;
+            border-left-color: #00ff00;
+        }
+
+        .sidebar-button {
+            margin: 15px;
+            padding: 8px;
+            background-color: #003800;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            width: calc(100% - 30px);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+
+        .sidebar-button:hover {
+            background-color: #00aa00;
+            color: #000000;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+            max-width: calc(100% - 250px);
+        }
+
+        .about-title {
+            text-align: center;
+            padding: 20px;
+            font-size: 32px;
+            font-weight: bold;
+            border-bottom: 2px solid #00ff00;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px #00ff00;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+        }
+
+        .about-section {
+            background-color: #001800;
+            border: 2px solid #00ff00;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .about-section h2 {
+            color: #00ff00;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #00ff00;
+            padding-bottom: 10px;
+            font-size: 24px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .about-section p,
+        .about-section ul,
+        .about-section li {
+            font-family: 'Courier New', monospace;
+        }
+
+        .about-section a {
+            color: #00ff00;
+            text-decoration: underline;
+            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
+        }
+
+        .about-section a:hover {
+            color: #ffffff;
+            text-shadow: 0 0 5px #00ff00;
+        }
+
+        .about-footer {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #008800;
+        }
+
+        .bottom-nav {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-title">SYNTAX TREE ANALYZER</div>
+
+        <div class="bottom-nav">
+            <a th:href="@{/}" class="sidebar-button">BACK</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="about-title">ABOUT THIS PROJECT</div>
+
+        <div class="about-section">
+            <h2>Project Overview</h2>
+            <p>
+                This is a simple Java parser implementation that demonstrates the principles of lexical analysis,
+                tokenization, and recursive descent parsing. It is capable of parsing and validating simple
+                arithmetic expressions and creating a syntax tree representation.
+            </p>
+            <p>
+                The parser handles identifiers, basic arithmetic operations (+, -, *, /), parentheses for grouping,
+                and memory operations (& for address, * for dereference).
+            </p>
+        </div>
+
+        <div class="about-section">
+            <h2>Repository</h2>
+            <p>
+                You can find the source code for this project on GitHub:
+                <br>
+                <a href="https://github.com/ecfesa/java-parser-implementation" target="_blank">
+                    https://github.com/ecfesa/java-parser-implementation
+                </a>
+            </p>
+        </div>
+
+        <div class="about-section">
+            <h2>Authors</h2>
+            <ul>
+                <li>Lucas Santos</li>
+                <li>Rhian Rodrigues</li>
+            </ul>
+        </div>
+
+        <div class="about-section">
+            <h2>Context</h2>
+            <p>
+                This project was developed for FESA university during the 7th semester in the compilers class.
+                It serves as a practical implementation of the theoretical concepts learned in the course.
+            </p>
+        </div>
+
+        <div class="about-footer">
+            &copy; 2024 - Java Parser Implementation
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

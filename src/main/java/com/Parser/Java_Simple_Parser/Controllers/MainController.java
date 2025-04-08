@@ -67,6 +67,11 @@ public class MainController {
         return "index";
     }
 
+    @GetMapping("/about")
+    public String about() {
+        return "about";
+    }
+
     @PostMapping("/test")
     public String test(@RequestParam("input") String input, Model model) {
         TestResult result = runTest(input, false); // Mark as user-added
