@@ -1,12 +1,421 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    <header></header>
-    <main>test</main>
-    <footer></footer>
-  </body>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <title>Parser Implementation</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      background-color: #000;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      background-color: #001800;
+      border-right: 2px solid #00ff00;
+      padding: 15px 0;
+      position: fixed;
+      overflow-y: auto;
+    }
+
+    .sidebar-title {
+      text-align: center;
+      color: #00ff00;
+      padding: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      border-bottom: 1px solid #00ff00;
+      margin-bottom: 15px;
+      text-shadow: 0 0 5px #00ff00;
+    }
+
+    .sidebar-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar-divider {
+      padding: 8px 15px;
+      background-color: #002000;
+      color: #00ff00;
+      font-weight: bold;
+      text-align: center;
+      border-bottom: 1px solid #00ff00;
+      margin-top: 10px;
+      text-shadow: 0 0 5px #00ff00;
+    }
+
+    .sidebar-item {
+      padding: 8px 15px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sidebar-item:hover {
+      background-color: #002800;
+      border-left-color: #00ff00;
+    }
+
+    .sidebar-item .item-passed {
+      color: #00ff00;
+      font-weight: bold;
+    }
+
+    .sidebar-item .item-failed {
+      color: #ff0000;
+      font-weight: bold;
+    }
+
+    .clear-button {
+      margin: 15px;
+      padding: 8px;
+      background-color: #480000;
+      color: #ff5555;
+      border: 1px solid #ff0000;
+      width: calc(100% - 30px);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .clear-button:hover {
+      background-color: #800000;
+      color: #ffffff;
+      box-shadow: 0 0 10px #ff0000;
+    }
+
+    .main-content {
+      flex: 1;
+      margin-left: 250px;
+      padding: 20px;
+      max-width: calc(100% - 250px);
+    }
+
+    .syntax-tree {
+      font-family: 'Courier New', monospace;
+      white-space: pre;
+      background-color: #001800;
+      padding: 15px;
+      border-radius: 5px;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+    }
+
+    .test-card {
+      margin-bottom: 20px;
+      border: 2px solid #00ff00;
+      background-color: #000800;
+      scroll-margin-top: 20px;
+    }
+
+    .test-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      background-color: #002800;
+      border-bottom: 1px solid #00ff00;
+    }
+
+    .test-body {
+      padding: 15px;
+    }
+
+    .passed {
+      color: #00ff00;
+      font-weight: bold;
+      text-shadow: 0 0 10px #00ff00;
+    }
+
+    .failed {
+      color: #ff0000;
+      font-weight: bold;
+      text-shadow: 0 0 10px #ff0000;
+    }
+
+    .parser-title {
+      text-align: center;
+      padding: 20px;
+      font-size: 32px;
+      font-weight: bold;
+      border-bottom: 2px solid #00ff00;
+      margin-bottom: 20px;
+      text-shadow: 0 0 15px #00ff00;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 2px;
+    }
+
+    .input-section {
+      display: flex;
+      margin-bottom: 30px;
+      gap: 10px;
+    }
+
+    .input-field {
+      flex-grow: 1;
+      padding: 10px;
+      font-size: 18px;
+      border: 2px solid #00ff00;
+      background-color: #000800;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+    }
+
+    .input-field::placeholder {
+      color: #00aa00;
+    }
+
+    .test-button {
+      padding: 10px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      background-color: #003800;
+      color: #00ff00;
+      border: 2px solid #00ff00;
+      font-family: 'Courier New', monospace;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .test-button:hover {
+      background-color: #00ff00;
+      color: #000;
+      box-shadow: 0 0 10px #00ff00;
+    }
+
+    pre {
+      color: #00ff00;
+      margin: 0;
+    }
+
+    /* Syntax highlighting for the ASCII tree */
+    .syntax-tree pre {
+      line-height: 1.4;
+    }
+
+    /* Highlight tree structure characters */
+    .syntax-tree pre span.tree-structure {
+      color: #008800;
+      opacity: 0.8;
+    }
+
+    /* Highlight node types */
+    .syntax-tree pre span.node-type {
+      color: #00ffaa;
+      font-weight: bold;
+    }
+
+    /* Highlight node values */
+    .syntax-tree pre span.node-value {
+      color: #88ff88;
+    }
+
+    /* Highlight tokens */
+    .syntax-tree pre span.token {
+      color: #ff77ff;
+      font-weight: bold;
+      text-shadow: 0 0 5px #ff00ff;
+    }
+
+    /* Animation effect for the tree */
+    @keyframes matrix-fade {
+      0% {
+        text-shadow: 0 0 2px #00ff00;
+      }
+
+      50% {
+        text-shadow: 0 0 5px #00ff00;
+      }
+
+      100% {
+        text-shadow: 0 0 2px #00ff00;
+      }
+    }
+
+    .syntax-tree pre {
+      animation: matrix-fade 2s infinite;
+    }
+
+    .test-section-divider {
+      text-align: center;
+      padding: 10px;
+      margin: 25px 0 15px 0;
+      background-color: #002800;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      color: #00ff00;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-shadow: 0 0 5px #00ff00;
+    }
+
+    .user-test {
+      border-left: 4px solid #00aaff;
+    }
+
+    .built-in-test {
+      border-left: 4px solid #00ff00;
+    }
+  </style>
+
+  <!-- Add script for syntax highlighting -->
+  <script>
+    function highlightSyntaxTree() {
+      const preElements = document.querySelectorAll('.syntax-tree pre');
+
+      preElements.forEach(pre => {
+        let content = pre.innerHTML;
+
+        // Highlight tree structure
+        content = content.replace(/(│|├─|└─)/g, '<span class="tree-structure">$1</span>');
+
+        // Highlight node types (assuming typical node names from the grammar)
+        content = content.replace(/\b(E|E'|T|T'|F)\b/g,
+          '<span class="node-type">$1</span>');
+
+        // Highlight tokens
+        content = content.replace(/\b(PLUS|STAR|SLASH|AMP|LPAREN|RPAREN|ID)\b/g,
+          '<span class="token">$1</span>');
+
+        // Highlight specific token values
+        content = content.replace(/: (\+|\*|\/|\&|\(|\))/g, ': <span class="token">$1</span>');
+
+        // Highlight node values after colons
+        content = content.replace(/: ([^<\n]+)/g, ': <span class="node-value">$1</span>');
+
+        pre.innerHTML = content;
+      });
+    }
+
+    // Run highlighting when DOM loads and after AJAX updates
+    document.addEventListener('DOMContentLoaded', highlightSyntaxTree);
+
+    // Function to handle sidebar item clicks
+    function setupSidebarNavigation() {
+      document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.addEventListener('click', function () {
+          const targetId = this.getAttribute('data-target');
+          const targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+      highlightSyntaxTree();
+      setupSidebarNavigation();
+    });
+
+    // Observer for dynamic content updates
+    const observer = new MutationObserver(function () {
+      highlightSyntaxTree();
+      setupSidebarNavigation();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  </script>
+</head>
+
+<body>
+  <div class="sidebar">
+    <div class="sidebar-title">TEST CASES</div>
+
+    <!-- User-added tests section -->
+    <div class="sidebar-divider" th:if="${testResults.?[!builtIn].size() > 0}">USER TESTS</div>
+    <ul class="sidebar-list">
+      <li th:each="result, iterStat : ${testResults}" th:if="${!result.builtIn}"
+        th:attr="data-target='test-' + ${iterStat.index}" class="sidebar-item">
+        <span th:text="${result.input}" class="item-text"></span>
+        <span th:class="${result.passed} ? 'item-passed' : 'item-failed'"
+          th:text="${result.passed} ? 'PASS' : 'FAIL'"></span>
+      </li>
+    </ul>
+
+    <!-- Clear all button -->
+    <form th:action="@{/clear}" method="post" th:if="${testResults.?[!builtIn].size() > 0}">
+      <button type="submit" class="clear-button">CLEAR ALL</button>
+    </form>
+
+    <!-- Built-in tests section -->
+    <div class="sidebar-divider">BUILT-IN EXAMPLES</div>
+    <ul class="sidebar-list">
+      <li th:each="result, iterStat : ${testResults}" th:if="${result.builtIn}"
+        th:attr="data-target='test-' + ${iterStat.index}" class="sidebar-item">
+        <span th:text="${result.input}" class="item-text"></span>
+        <span th:class="${result.passed} ? 'item-passed' : 'item-failed'"
+          th:text="${result.passed} ? 'PASS' : 'FAIL'"></span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <div class="parser-title">SYNTAX TREE ANALYZER</div>
+
+    <form th:action="@{/test}" method="post" class="input-section">
+      <input type="text" name="input" placeholder="< input for test string >" class="input-field" required>
+      <button type="submit" class="test-button">TEST</button>
+    </form>
+
+    <!-- User tests section header -->
+    <div class="test-section-divider" th:if="${testResults.?[!builtIn].size() > 0}">
+      USER TEST CASES
+    </div>
+
+    <!-- User tests -->
+    <div th:each="result, iterStat : ${testResults}" th:if="${!result.builtIn}" th:id="'test-' + ${iterStat.index}"
+      class="test-card user-test">
+      <div class="test-header">
+        <div>TEST <span th:text="${result.input}"></span></div>
+        <div th:class="${result.passed} ? 'passed' : 'failed'" th:text="${result.passed} ? 'PASSED' : 'FAILED'"></div>
+      </div>
+      <div class="test-body">
+        <div class="syntax-tree" th:if="${result.passed}">
+          <pre th:text="${result.syntaxTree}"></pre>
+        </div>
+        <div class="syntax-tree" th:if="${!result.passed}">
+          <pre th:text="'Error: ' + ${result.errorMessage}"></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Built-in tests section header -->
+    <div class="test-section-divider">
+      BUILT-IN EXAMPLES
+    </div>
+
+    <!-- Built-in tests -->
+    <div th:each="result, iterStat : ${testResults}" th:if="${result.builtIn}" th:id="'test-' + ${iterStat.index}"
+      class="test-card built-in-test">
+      <div class="test-header">
+        <div>TEST <span th:text="${result.input}"></span></div>
+        <div th:class="${result.passed} ? 'passed' : 'failed'" th:text="${result.passed} ? 'PASSED' : 'FAILED'"></div>
+      </div>
+      <div class="test-body">
+        <div class="syntax-tree" th:if="${result.passed}">
+          <pre th:text="${result.syntaxTree}"></pre>
+        </div>
+        <div class="syntax-tree" th:if="${!result.passed}">
+          <pre th:text="'Error: ' + ${result.errorMessage}"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
 </html>
