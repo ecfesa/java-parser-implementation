@@ -26,10 +26,9 @@ public class MainController {
             System.out.println(token.type + ":" + token.value);
         }
 
-        try{
-            parser.parse();
-        }
-        catch (RuntimeException e){
+        try {
+            Parser.SyntacticTreeNode parseTree = parser.parse();
+        } catch (RuntimeException e) {
             System.out.print(e);
         }
 
