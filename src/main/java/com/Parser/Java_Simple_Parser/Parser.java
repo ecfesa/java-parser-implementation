@@ -40,6 +40,11 @@
     public void parse() {
         System.out.println("Parsing started.");
         E(); // Start symbol
+
+        if(tokens.size() > pos){
+         throw new RuntimeException("Unexpected token in F: " + peek().value);
+        }
+
         System.out.println("Parsing completed successfully.");
     }
 
