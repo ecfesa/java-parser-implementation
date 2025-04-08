@@ -46,7 +46,6 @@
     // E → T E'
     private void E() {
         System.out.println("Enter E");
-        System.out.println(tokens.get(pos).value);
         T();
         EPrime();
         System.out.println("Exit E");
@@ -55,7 +54,6 @@
     // E' → + T E' | ε
     private void EPrime() {
         System.out.println("Enter E'");
-        System.out.println(tokens.get(pos).value);
         if (match(TokenType.PLUS)) {
             System.out.println("Matched '+'");
             T();
@@ -67,7 +65,6 @@
     // T → F T'
     private void T() {
         System.out.println("Enter T");
-        System.out.println(tokens.get(pos).value);
         F();
         TPrime();
         System.out.println("Exit T");
@@ -89,7 +86,7 @@
     }
 
     private void F() {
-        System.out.println("Enter F");
+        System.out.println("Enter F - " + tokens.get(pos).type);
         if (match(TokenType.STAR)) {
             System.out.println("Matched unary '*'");
             F();

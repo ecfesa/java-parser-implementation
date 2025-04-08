@@ -15,7 +15,7 @@ public class MainController {
     @GetMapping("/")
     public String home() {
 
-        String input = "a)sdas)";
+        String input = "a)";
         input = input.replaceAll(" ", "");
 
         List<Token> tokens = Tokenizer.tokenizer(input);
